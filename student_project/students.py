@@ -1,41 +1,51 @@
 
 import random
-from datetime import date, timedelta
 
 
-def generate_birth_date():
-    """Generate a random birth date between 2000 and 2006."""
-    start_date = date(2000, 1, 1)
-    end_date = date(2006, 12, 31)
+def generate_students():
+    students = []
 
-    days_range = (end_date - start_date).days
-    random_days = random.randint(0, days_range)
+    for i in range(10):
+        student = {}
 
-    return start_date + timedelta(days=random_days)
+        student["id"] = i + 1
 
+     
+        year = random.randint(2000, 2006)
+        month = random.randint(1, 12)
 
-def generate_student(student_id):
-    """Generate data for one student."""
-    birth_date = generate_birth_date()
+       
+        if month == 2:
+            if year % 4 == 0:
+                days = 29
+            else:
+                days = 28
 
-    grades = [
-        round(random.uniform(0, 20), 2)
-        for _ in range(3)
-    ]
+        elif month == 4 or month == 6 or month == 9 or month == 11:
+            days = 30
 
-    average = round(sum(grades) / len(grades), 2)
+        else:
+            days = 31
 
-    return {
-        "student_id": student_id,
-        "birth_date": birth_date,
-        "grades": grades,
-        "average": average
-    }
+      
+        day = random.randint(1, days)
 
+        student["birth_year"] = year
+        student["birth_month"] = month
+        student["birth_day"] = day
 
-def generate_students(number_of_students=10):
-    """Generate data for the entire class."""
-    return [
-        generate_student(i)
-        for i in range(1, number_of_students + 1)
-    ]
+       
+        grades = []
+
+        for j in range(3):
+            grade = random.randint(0, 20)
+            grades.append(grade)
+
+        student["grades"] = grades
+
+      
+        student["average"] = sum(grades) / 3
+
+        students.append(student)
+
+    return students
