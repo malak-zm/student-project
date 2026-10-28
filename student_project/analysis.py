@@ -1,46 +1,37 @@
 
-from datetime import date
-from statistics import mean, median, pstdev
+def calculate_age(birth_year, birth_month, birth_day):
+    age = 2026 - birth_year
 
-
-def calculate_age(birth_date):
-    """Calculate the student's age in completed years."""
-    today = date.today()
-    age = today.year - birth_date.year
-
-    if (today.month, today.day) < (
-        birth_date.month, birth_date.day
-    ):
-        age -= 1
+    if birth_month > 10:
+        age = age - 1
+    elif birth_month == 10 and birth_day > 29:
+        age = age - 1
 
     return age
 
 
-def add_ages(students):
-    """Add the age to each student's data."""
-    for student in students:
-        student["age"] = calculate_age(
-            student["birth_date"]
-        )
-
-    return students
-
-
 def calculate_statistics(students):
-    """Calculate statistics for the class."""
-    averages = [s["average"] for s in students]
-    ages = [s["age"] for s in students]
+    averages = []
+    ages = []
 
-    minimum = min(students, key=lambda s: s["average"])
-    maximum = max(students, key=lambda s: s["average"])
+    for student in students:
+        averages.append(student["average"])
+        ages.append(student["age"])
 
-    return {
-        "mean": mean(averages),
-        "median": median(averages),
-        "standard_deviation": pstdev(averages),
-        "minimum_average": minimum["average"],
-        "minimum_student_id": minimum["student_id"],
-        "maximum_average": maximum["average"],
-        "maximum_student_id": maximum["student_id"],
-        "mean_age": mean(ages)
-    }
+    mean = sum(averages) / len(averages)
+
+    sorted_averages = sorted(averages)
+    median = (sorted_averages[4] + sorted_averages[5]) / 2
+
+    total = 0
+
+    for average in averages:
+        total = total + (average - mean) ** 2
+
+    standard_deviation = (total / len(averages)) ** 0.5
+
+    minimum = min(averages)
+    maximum = max(averages)
+    mean_age = sum(ages) / len(ages)
+
+    return mean, median, standard_deviation, minimum, maximum, mean_age
